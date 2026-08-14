@@ -1,5 +1,5 @@
 import { Router, Request, Response } from 'express';
-import { getAllStudents, getStudentById } from '../service/studentService';
+import { getAllStudents, getStudentById, createStudent } from '../service/studentService';
 
 const router = Router();
 
@@ -25,6 +25,16 @@ router.get('/students/:id', async (req: Request, res: Response) => {
     res.json(user);
   } catch (error) {
     res.status(500).json({ message: 'Server error' });
+  }
+});
+
+
+router.post('/students', async (req: Request, res: Response) => {
+  try {
+    const newStudent = await createStudent(req.body);
+    res.status(201).json(newStudent);
+  } catch (error) {
+    res.status(500).json({ message: 'Server Error'});
   }
 });
 
