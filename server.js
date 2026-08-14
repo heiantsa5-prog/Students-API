@@ -5,7 +5,7 @@ const port = 3000;
 
 let students = [
     {id: 1, firstName: "Dupont", lastName: "Lea", age: "20" },
-    {id: 2, firstName: "Dupont", lastName: "Jean", age: "19" },
+    {id: 2, firstName: "Dubois", lastName: "Jean", age: "19" },
     {id: 3, firstName: "Dupont", lastName: "Sophia", age: "20" }
 ]
 
