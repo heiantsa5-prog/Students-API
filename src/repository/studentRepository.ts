@@ -25,18 +25,35 @@ export async function findStudentById(id: number): Promise<Student | null> {
     };
 }
 
-export async function createNewStudent(userData: Omit<Student, 'id'>): Promise<Student> {
+export async function createNewStudent(studentData: Omit<Student, 'id'>): Promise<Student> {
     const sql = `INSERT INTO student (first_name, last_name, age) VALUES ($1, $2, $3) RETURNING id`;
     const values = [
-        userData.firstName,
-        userData.lastName,
-        userData.age
+        studentData.firstName,
+        studentData.lastName,
+        studentData.age
     ];
 
     const result = await database.query(sql, values);
 
     return {
         id: result.rows[0].id,
-        ...userData
+        ...studentData
     };
+}
+
+export async function modifyStudent(id: number, studentData: Omit<Student, 'id'>): Promise<Student> {
+    const sql = `
+    UPDATE student 
+    SET first_name = $1, last_name = $2, age = $3 
+    WHERE id = $4 
+    RETURNING id, first_name AS "firstName", last_name AS "lastName", age`;
+    const values = [
+        studentData.firstName,
+        studentData.lastName,
+        studentData.age
+    ];
+
+    const result = await database.query(sql, values);
+
+    return result.rows[0];
 }

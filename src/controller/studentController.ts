@@ -1,5 +1,5 @@
 import { Router, Request, Response } from 'express';
-import { getAllStudents, getStudentById, createStudent } from '../service/studentService';
+import { getAllStudents, getStudentById, createStudent, updateStudent } from '../service/studentService';
 
 const router = Router();
 
@@ -13,16 +13,17 @@ router.get('/students', async (_req: Request, res: Response) => {
 });
 
 
+
 router.get('/students/:id', async (req: Request, res: Response) => {
   try {
     const id = parseInt(req.params.id as string, 10);
-    const user = await getStudentById(id);
+    const student = await getStudentById(id);
 
-    if (!user) {
+    if (!student) {
       return res.status(404).json({ message: 'Student not found' });
     }
 
-    res.json(user);
+    res.json(student);
   } catch (error) {
     res.status(500).json({ message: 'Server error' });
   }
@@ -38,5 +39,17 @@ router.post('/students', async (req: Request, res: Response) => {
   }
 });
 
+router.post('/students/:id', async (req: Request, res: Response) => {
+  try {
+    const id = parseInt(req.params.id as string, 10);
+    const student = await updateStudent(id, req.body);
+    if (!student) {
+      return res.status(404).json({ message: 'Student not found' });
+    }
+    res.status(201).json(student);
+  } catch (error) {
+    res.status(500).json({ message: 'Server Error'});
+  }
+});
 
 export default router;
