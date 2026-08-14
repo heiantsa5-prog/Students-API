@@ -59,7 +59,7 @@ export async function modifyStudent(id: number, studentData: Omit<Student, 'id'>
     return result.rows[0];
 }
 
-export async function modifyStudentPartielly(id: number, studentData : Partial<Omit<Student, 'id'>>): Promise<Student | null> {
+export async function modifyStudentPartielly(id: number, studentData : Partial<Omit<Student, 'id'>>): Promise<Student> {
     const student = await database.query(`SELECT * FROM student WHERE id = $1`, [id]);
     const row = student.rows[0];
 
@@ -77,4 +77,9 @@ export async function modifyStudentPartielly(id: number, studentData : Partial<O
     const result = await database.query(sql, values);
 
     return result.rows[0];
+}
+
+export async function deleteStudent(id: number): Promise<boolean> {
+    const result = await database.query(`DELETE FROM student WHERE id = $1`, [id]);
+    return (result.rowCount ?? 0) > 0;
 }
