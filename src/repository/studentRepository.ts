@@ -50,9 +50,30 @@ export async function modifyStudent(id: number, studentData: Omit<Student, 'id'>
     const values = [
         studentData.firstName,
         studentData.lastName,
-        studentData.age
+        studentData.age,
+        id
     ];
 
+    const result = await database.query(sql, values);
+
+    return result.rows[0];
+}
+
+export async function modifyStudentPartielly(id: number, studentData : Partial<Omit<Student, 'id'>>): Promise<Student | null> {
+    const student = await database.query(`SELECT * FROM student WHERE id = $1`, [id]);
+    const row = student.rows[0];
+
+    const newFirstName = studentData.firstName ?? row.first_name;
+    const newLastName = studentData.lastName ?? row.last_ame;
+    const newAge = studentData.age ?? row.age;
+
+    const sql = `
+    UPDATE student 
+    SET first_name = $1, last_name = $2, age = $3 
+    WHERE id = $4 
+    RETURNING id, first_name AS "firstName", last_name AS "lastName", age`;
+
+    const values = [newFirstName, newLastName, newAge, id];
     const result = await database.query(sql, values);
 
     return result.rows[0];

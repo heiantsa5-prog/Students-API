@@ -1,4 +1,4 @@
-import { findAllStudents, findStudentById, createNewStudent, modifyStudent} from '../repository/studentRepository.ts';
+import { findAllStudents, findStudentById, createNewStudent, modifyStudent, modifyStudentPartielly} from '../repository/studentRepository.ts';
 import { Student } from '../model/studentModel';
 
 export async function getAllStudents(): Promise<Student[]> {
@@ -15,4 +15,8 @@ export async function createStudent(studentData: Omit<Student, 'id'>): Promise<S
 
 export async function updateStudent(id: number, studentData: Omit<Student, 'id'>): Promise<Student | null> {
   return await modifyStudent(id, studentData);
+}
+
+export async function modifyPartiellyStudent(id: number, studentData: Omit<Student, 'id'>): Promise<Student | null> {
+  return await modifyStudentPartielly(id, studentData);
 }

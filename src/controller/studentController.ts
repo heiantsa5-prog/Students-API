@@ -1,5 +1,5 @@
 import { Router, Request, Response } from 'express';
-import { getAllStudents, getStudentById, createStudent, updateStudent } from '../service/studentService';
+import { getAllStudents, getStudentById, createStudent, updateStudent, modifyPartiellyStudent } from '../service/studentService';
 
 const router = Router();
 
@@ -39,10 +39,23 @@ router.post('/students', async (req: Request, res: Response) => {
   }
 });
 
-router.post('/students/:id', async (req: Request, res: Response) => {
+router.put('/students/:id', async (req: Request, res: Response) => {
   try {
     const id = parseInt(req.params.id as string, 10);
     const student = await updateStudent(id, req.body);
+    if (!student) {
+      return res.status(404).json({ message: 'Student not found' });
+    }
+    res.status(201).json(student);
+  } catch (error) {
+    res.status(500).json({ message: 'Server Error'});
+  }
+});
+
+router.patch('/students/:id', async (req: Request, res: Response) => {
+  try {
+    const id = parseInt(req.params.id as string, 10);
+    const student = await modifyPartiellyStudent(id, req.body);
     if (!student) {
       return res.status(404).json({ message: 'Student not found' });
     }
