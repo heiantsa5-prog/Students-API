@@ -3,13 +3,6 @@ import express from 'express';
 const app = express();
 const port = 3000;
 
-let students = [
-    {id: 1, firstName: "Dupont", lastName: "Lea", age: "20" },
-    {id: 2, firstName: "Dubois", lastName: "Jean", age: "19" },
-    {id: 3, firstName: "Dupont", lastName: "Sophia", age: "20" }
-]
-
-const nextId = 4;
 
 app.get('/students', (req, res) => {
     res.json(students);

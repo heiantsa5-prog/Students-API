@@ -1,9 +1,10 @@
 import { Router, Request, Response } from 'express';
 import { getAllStudents, getStudentById, createStudent, updateStudent, modifyPartiellyStudent, removeStudent } from '../service/studentService';
+import { authenticate } from '../middleware/auth.ts';
 
 const router = Router();
 
-router.get('/students', async (_req: Request, res: Response) => {
+router.get('/students', authenticate, async (_req: Request, res: Response) => {
   try {
     const students = await getAllStudents();
     res.json(students);
@@ -14,7 +15,7 @@ router.get('/students', async (_req: Request, res: Response) => {
 
 
 
-router.get('/students/:id', async (req: Request, res: Response) => {
+router.get('/students/:id', authenticate, async (req: Request, res: Response) => {
   try {
     const id = parseInt(req.params.id as string, 10);
     const student = await getStudentById(id);
@@ -30,7 +31,7 @@ router.get('/students/:id', async (req: Request, res: Response) => {
 });
 
 
-router.post('/students', async (req: Request, res: Response) => {
+router.post('/students', authenticate,  async (req: Request, res: Response) => {
   try {
     const newStudent = await createStudent(req.body);
     res.status(201).json(newStudent);
@@ -39,7 +40,7 @@ router.post('/students', async (req: Request, res: Response) => {
   }
 });
 
-router.put('/students/:id', async (req: Request, res: Response) => {
+router.put('/students/:id', authenticate, async (req: Request, res: Response) => {
   try {
     const id = parseInt(req.params.id as string, 10);
     const student = await updateStudent(id, req.body);
@@ -52,7 +53,7 @@ router.put('/students/:id', async (req: Request, res: Response) => {
   }
 });
 
-router.patch('/students/:id', async (req: Request, res: Response) => {
+router.patch('/students/:id', authenticate, async (req: Request, res: Response) => {
   try {
     const id = parseInt(req.params.id as string, 10);
     const student = await modifyPartiellyStudent(id, req.body);
@@ -65,7 +66,7 @@ router.patch('/students/:id', async (req: Request, res: Response) => {
   }
 });
 
-router.delete('/students/:id', async (req: Request, res: Response) => {
+router.delete('/students/:id', authenticate, async (req: Request, res: Response) => {
   try {
     const id = parseInt(req.params.id as string, 10);
     const studentDeleted = await removeStudent(id);

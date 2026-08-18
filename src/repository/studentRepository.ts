@@ -1,7 +1,7 @@
 import database  from '../db';
 import { Student } from '../model/studentModel';
 
-export async function findAllStudents(): Promise<Student[]> {
+export const findAllStudents = async () : Promise<Student[]> => {
     const result = await database.query('SELECT * FROM student');
 
     return result.rows.map((row) => ({
@@ -13,7 +13,7 @@ export async function findAllStudents(): Promise<Student[]> {
 }
 
 
-export async function findStudentById(id: number): Promise<Student | null> {
+export const findStudentById = async (id: number): Promise<Student | null> => {
     const result = await database.query('SELECT * FROM student WHERE id = $1', [id]);
 
     const row = result.rows[0];
@@ -25,7 +25,7 @@ export async function findStudentById(id: number): Promise<Student | null> {
     };
 }
 
-export async function createNewStudent(studentData: Omit<Student, 'id'>): Promise<Student> {
+export const createNewStudent = async (studentData: Omit<Student, 'id'>): Promise<Student> => {
     const sql = `INSERT INTO student (first_name, last_name, age) VALUES ($1, $2, $3) RETURNING id`;
     const values = [
         studentData.firstName,
@@ -41,7 +41,7 @@ export async function createNewStudent(studentData: Omit<Student, 'id'>): Promis
     };
 }
 
-export async function modifyStudent(id: number, studentData: Omit<Student, 'id'>): Promise<Student> {
+export const modifyStudent = async (id: number, studentData: Omit<Student, 'id'>): Promise<Student | null> => {
     const sql = `
     UPDATE student 
     SET first_name = $1, last_name = $2, age = $3 
@@ -59,7 +59,7 @@ export async function modifyStudent(id: number, studentData: Omit<Student, 'id'>
     return result.rows[0];
 }
 
-export async function modifyStudentPartielly(id: number, studentData : Partial<Omit<Student, 'id'>>): Promise<Student> {
+export const modifyStudentPartielly = async (id: number, studentData : Partial<Omit<Student, 'id'>>): Promise<Student | null> => {
     const student = await database.query(`SELECT * FROM student WHERE id = $1`, [id]);
     const row = student.rows[0];
 
@@ -79,7 +79,7 @@ export async function modifyStudentPartielly(id: number, studentData : Partial<O
     return result.rows[0];
 }
 
-export async function deleteStudent(id: number): Promise<boolean> {
+export const deleteStudent = async (id: number): Promise<boolean> => {
     const result = await database.query(`DELETE FROM student WHERE id = $1`, [id]);
     return (result.rowCount ?? 0) > 0;
 }
