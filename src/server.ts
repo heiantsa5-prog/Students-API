@@ -1,7 +1,14 @@
 import express from 'express';
 import { generateToken, authenticate } from './middleware/auth';
+import cors from 'cors';
 
 const app = express();
+
+app.use(cors ({
+  origin: '*',
+  methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+}))
 app.use(express.json());
 
 app.post('/login', (req, res) => {
@@ -12,7 +19,7 @@ app.post('/login', (req, res) => {
     return res.json({ token });
   }
 
-  return res.status(401).json({ message: 'Invalided id' });
+  return res.status(401).json({ message: 'Invalided identification' });
 });
 
 
